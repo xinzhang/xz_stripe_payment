@@ -22,19 +22,20 @@ class _HomeState extends State<HomePage> {
   }
 
   payViaNewCard(BuildContext context) async {
-    var response = StripeService.payWithNewCard(amount: '15', currency: 'AUD');
-    if (response.success == true) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(response.message),
-        duration: new Duration(milliseconds: 1200),
-      ));
-    }
+    var response =
+        await StripeService.payWithNewCard(amount: '150', currency: 'AUD');
+
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(response.message),
+      duration:
+          new Duration(milliseconds: response.success == true ? 1200 : 3000),
+    ));
   }
 
   @override
   void initState() {
     super.initState();
-    //StripeService.init();
+    StripeService.init();
   }
 
   @override
