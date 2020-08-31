@@ -21,7 +21,7 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
       'showBackView': false,
     },
     {
-      'cardNumber': '5555555566554444',
+      'cardNumber': '5555555555554444',
       'expiryDate': '04/23',
       'cardHolderName': 'Tracer',
       'cvvCode': '123',
@@ -30,6 +30,10 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
   ];
 
   payViaExistingCard(BuildContext context, card) async {
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: "processing payment ...");
+    await dialog.show();
+
     var expiryArr = card['expiryDate'].split('/');
     CreditCard stripeCard = CreditCard(
       number: card['cardNumber'],
@@ -39,6 +43,8 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
 
     var response = await StripeService.payViaExistingCard(
         amount: '120', currency: 'AUD', card: stripeCard);
+
+    await dialog.hide();
 
     Scaffold.of(context)
         .showSnackBar(SnackBar(

@@ -22,8 +22,14 @@ class _HomeState extends State<HomePage> {
   }
 
   payViaNewCard(BuildContext context) async {
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: "processing payment ...");
+    await dialog.show();
+
     var response =
         await StripeService.payWithNewCard(amount: '150', currency: 'AUD');
+
+    await dialog.hide();
 
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(response.message),
